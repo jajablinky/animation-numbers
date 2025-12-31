@@ -13,6 +13,7 @@ function HomePage() {
   const [squishExponent, setSquishExponent] = useState(0.6);
   const [originStrength, setOriginStrength] = useState(1.0);
   const [showDots, setShowDots] = useState(true);
+  const [showBorder, setShowBorder] = useState(true);
 
   const {
     x,
@@ -47,15 +48,15 @@ function HomePage() {
         {/* Main */}
         <div className="flex-1 min-w-0 flex flex-col">
           <div className="p-4 flex items-center justify-between">
+            <div className="text-[11px] text-gray-500 font-roboto-mono">
+              pointer-driven
+            </div>
             <button
               onClick={() => setShowDebug(s => !s)}
               className="px-3 py-2 bg-white/90 text-gray-900 text-sm font-medium rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-white transition-all duration-150 active:scale-[0.99] backdrop-blur"
             >
               {showDebug ? 'Hide Controls' : 'Show Controls'}
             </button>
-            <div className="text-[11px] text-gray-500 font-roboto-mono">
-              pointer-driven
-            </div>
           </div>
 
           <div className="flex-1 flex items-center justify-center p-6">
@@ -66,6 +67,7 @@ function HomePage() {
               dotLeftPositions={dotLeftPositions}
               refs={refs}
               showDots={showDots}
+              showBorder={showBorder}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               containerRef={containerRef}
@@ -98,9 +100,11 @@ function HomePage() {
                   squishExponent={squishExponent}
                   originStrength={originStrength}
                   showDots={showDots}
+                  showBorder={showBorder}
                   onSquishExponentChange={setSquishExponent}
                   onOriginStrengthChange={setOriginStrength}
                   onShowDotsChange={setShowDots}
+                  onShowBorderChange={setShowBorder}
                   currentScale={currentValues.scale?.get()}
                   currentScaleValue={currentValues.scaleValue?.get()}
                   currentDisplayValue={currentValues.displayValue?.get()}

@@ -165,13 +165,14 @@ export function useProximityAnimation({
         const distanceFromCursorSide = Math.abs(
           elementPosInContainer - cursorPosInContainer
         );
-        const isElementRightOfCursor =
-          elementPosInContainer > cursorPosInContainer;
         const curvedDistance = Math.pow(distanceFromCursorSide, squishExponent);
         const baseMovement = curvedDistance * (50 + maxExtension);
-        transformOriginPercent = isElementRightOfCursor
-          ? 50 - baseMovement * originStrength
-          : 50 + baseMovement * originStrength;
+        // Squish toward the OPPOSITE side of the cursor (independent of element side).
+        // Cursor on left half -> bunch/pull origins toward the right edge.
+        // Cursor on right half -> bunch/pull origins toward the left edge.
+        const squishTowardRightEdge = cursorPosInContainer < 0.5;
+        const direction = squishTowardRightEdge ? 1 : -1;
+        transformOriginPercent = 50 + direction * baseMovement * originStrength;
       }
 
       const normalizedOffset =

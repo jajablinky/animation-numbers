@@ -9,6 +9,7 @@ interface NumberContainerProps {
   dotLeftPositions: MotionValue<string>[];
   refs: RefObject<HTMLSpanElement>[];
   showDots: boolean;
+  showBorder: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   containerRef: RefObject<HTMLDivElement>;
@@ -21,6 +22,7 @@ export function NumberContainer({
   dotLeftPositions,
   refs,
   showDots,
+  showBorder,
   onMouseEnter,
   onMouseLeave,
   containerRef,
@@ -28,7 +30,9 @@ export function NumberContainer({
   return (
     <div
       ref={containerRef}
-      className="text-center py-12 border-2 border-red-500"
+      className={`text-center py-12 ${
+        showBorder ? 'border-2 border-red-500' : ''
+      }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

@@ -80,7 +80,7 @@ export function CurveGraph({ exponent, onExponentChange }: CurveGraphProps) {
 
     // Draw axis labels
     ctx.fillStyle = '#6b7280'; // gray-500
-    ctx.font = '10px monospace';
+    ctx.font = '10px "DM Sans", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('0', padding, height - padding + 15);
     ctx.fillText('1', width - padding, height - padding + 15);
@@ -91,7 +91,7 @@ export function CurveGraph({ exponent, onExponentChange }: CurveGraphProps) {
     // Draw exponent label
     ctx.fillStyle = '#0f172a'; // slate-900
     ctx.textAlign = 'left';
-    ctx.font = '11px monospace';
+    ctx.font = '11px "DM Sans", sans-serif';
     ctx.fillText(`y = x^${exponent.toFixed(2)}`, padding + 5, padding + 15);
   }, [exponent]);
 
@@ -143,16 +143,15 @@ export function CurveGraph({ exponent, onExponentChange }: CurveGraphProps) {
         ref={canvasRef}
         width={width}
         height={height}
-        className="border border-gray-200 rounded-xl cursor-crosshair bg-white shadow-sm"
+        className="border border-gray-200 rounded-xl cursor-crosshair bg-white shadow-sm w-full"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       />
-      <div className="text-[11px] text-gray-500 font-roboto-mono">
+      <div className="text-[11px] text-gray-500 font-medium font-dm-sans">
         Drag to set exponent from curve shape
       </div>
     </div>
   );
 }
-

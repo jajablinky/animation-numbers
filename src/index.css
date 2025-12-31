@@ -238,7 +238,8 @@ input[type="range"].slider-thumb-light::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 9999px;
-  background: #06b6d4; /* cyan-500 */
+  background: #06b6d4;
+  /* cyan-500 */
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   border: 2px solid #ffffff;
@@ -258,22 +259,69 @@ input[type="range"].slider-thumb-light::-moz-range-thumb {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
+/* Simple dark slider */
+input[type="range"].slider-thumb-simple {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="range"].slider-thumb-simple::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #111827;
+  /* gray-900 */
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease;
+}
+
+input[type="range"].slider-thumb-simple::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+input[type="range"].slider-thumb-simple::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #111827;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease;
+}
+
 /* Minimal light scrollbar (DebugPanel) */
 .custom-scrollbar-light::-webkit-scrollbar {
   width: 10px;
 }
 
 .custom-scrollbar-light::-webkit-scrollbar-track {
-  background: rgba(243, 244, 246, 0.9); /* gray-100 */
+  background: rgba(243, 244, 246, 0.9);
+  /* gray-100 */
   border-radius: 9999px;
 }
 
 .custom-scrollbar-light::-webkit-scrollbar-thumb {
-  background: rgba(17, 24, 39, 0.18); /* gray-900 @ low alpha */
+  background: rgba(17, 24, 39, 0.18);
+  /* gray-900 @ low alpha */
   border-radius: 9999px;
   border: 2px solid rgba(243, 244, 246, 0.9);
 }
 
 .custom-scrollbar-light::-webkit-scrollbar-thumb:hover {
   background: rgba(17, 24, 39, 0.28);
+}
+
+@keyframes spin-linear {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-linear 3s linear infinite;
 }
