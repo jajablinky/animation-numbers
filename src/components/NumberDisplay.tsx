@@ -25,7 +25,7 @@ export const NumberDisplay = forwardRef<HTMLSpanElement, NumberDisplayProps>(
         </motion.span>
         {showDot && (
           <motion.div
-            className="absolute top-1/2 w-3 h-3 bg-red-500 rounded-full pointer-events-none z-10 -translate-y-1/2"
+            className="absolute top-1/2 w-3 h-3 bg-red-500 rounded-full pointer-events-none z-0 -translate-y-1/2"
             style={{
               left: dotPosition,
             }}

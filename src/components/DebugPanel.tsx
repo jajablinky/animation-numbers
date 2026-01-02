@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CurveGraph } from './CurveGraph';
 
@@ -78,14 +78,16 @@ export function DebugPanel({
             </button>
           )}
         </div>
-        
-        <div className="mb-2 flex items-center justify-between text-xs text-gray-500 font-medium">
-            <span>4 sections configured</span>
-        </div>
-        
-        <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden">
-          <div className="h-full bg-gray-900 w-1/4 rounded-full" />
-        </div>
+      </div>
+
+      {/* Live Readout - Always Visible */}
+      <div className="flex-none mb-4">
+        <CurrentValuesContent
+          scale={currentScale}
+          scaleValue={currentScaleValue}
+          displayValue={currentDisplayValue}
+          isInside={isInside}
+        />
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto pr-1 -mr-1 custom-scrollbar-light">
@@ -132,18 +134,6 @@ export function DebugPanel({
           />
         </CollapsibleSection>
 
-        <CollapsibleSection
-          title="Live Readout"
-          isOpen={expandedSection === 'readout'}
-          onToggle={() => toggleSection('readout')}
-        >
-          <CurrentValuesContent
-            scale={currentScale}
-            scaleValue={currentScaleValue}
-            displayValue={currentDisplayValue}
-            isInside={isInside}
-          />
-        </CollapsibleSection>
       </div>
     </div>
   );
@@ -236,7 +226,7 @@ function ScaleCurveContent({
           value={minScale}
           displayValue={minScale.toFixed(2)}
           min={0.01}
-          max={1}
+          max={0.2}
           step={0.01}
           onChange={onMinScaleChange}
         />
@@ -245,8 +235,8 @@ function ScaleCurveContent({
           value={maxScale}
           displayValue={maxScale.toFixed(2)}
           min={1}
-          max={5}
-          step={0.1}
+          max={1.5}
+          step={0.01}
           onChange={onMaxScaleChange}
         />
       </div>
@@ -256,17 +246,21 @@ function ScaleCurveContent({
             label="Curve Exponent"
             value={curveExponent}
             displayValue={curveExponent.toFixed(2)}
-            min={0.1}
-            max={3}
-            step={0.1}
+            min={3.0}
+            max={4.0}
+            step={0.01}
             onChange={onCurveExponentChange}
           />
-          <div className="text-xs text-gray-500 mt-1 font-medium">
-            {curveExponent < 1
-              ? 'Ease-out'
-              : curveExponent > 1
-              ? 'Ease-in'
-              : 'Linear'}
+          <div className="flex items-center gap-2 mt-2">
+            <div className="text-xs text-gray-500 font-medium flex items-center gap-2">
+              <span>Ease-out</span>
+              <MiniCurveGraph exponent={3.0} />
+            </div>
+            <div className="flex-1" />
+            <div className="text-xs text-gray-500 font-medium flex items-center gap-2">
+              <span>Ease-in</span>
+              <MiniCurveGraph exponent={4.0} />
+            </div>
           </div>
       </div>
     </div>
@@ -281,12 +275,13 @@ function DisplayCurveContent({
   onDisplayCurveExponentChange: (value: number) => void;
 }) {
   const getAggressivenessLabel = (value: number) => {
-    if (value < 0.01) return 'Extremely Aggressive';
-    if (value < 0.05) return 'Very Aggressive';
-    if (value < 0.1) return 'Aggressive';
-    if (value < 0.5) return 'Moderately Aggressive';
-    if (value < 1) return 'Moderate';
-    if (value < 1.5) return 'Gentle';
+    // Higher values = more aggressive (labels were reversed before)
+    if (value >= 2.8) return 'Extremely Aggressive';
+    if (value >= 2.5) return 'Very Aggressive';
+    if (value >= 2.2) return 'Aggressive';
+    if (value >= 2.1) return 'Moderately Aggressive';
+    if (value >= 2.05) return 'Moderate';
+    if (value >= 2.01) return 'Gentle';
     return 'Very Gentle';
   };
 
@@ -295,14 +290,10 @@ function DisplayCurveContent({
       <SliderInput
         label="Drop-off"
         value={displayCurveExponent}
-        displayValue={
-            displayCurveExponent < 0.1
-            ? displayCurveExponent.toFixed(3)
-            : displayCurveExponent.toFixed(2)
-        }
-        min={0.001}
-        max={2}
-        step={0.001}
+        displayValue={displayCurveExponent.toFixed(2)}
+        min={2.0}
+        max={3.0}
+        step={0.01}
         onChange={onDisplayCurveExponentChange}
       />
       <div className="flex items-center justify-between bg-white rounded-lg border border-gray-100 p-2">
@@ -310,7 +301,7 @@ function DisplayCurveContent({
           {getAggressivenessLabel(displayCurveExponent)}
         </span>
         <span className="text-[10px] text-gray-400 font-roboto-mono">
-          0.001–2.000
+          2.00–3.00
         </span>
       </div>
     </div>
@@ -342,9 +333,9 @@ function TransformOriginContent({
           label="Squish"
           value={squishExponent}
           displayValue={squishExponent.toFixed(2)}
-          min={0.1}
-          max={20}
-          step={0.1}
+          min={0.8}
+          max={1.2}
+          step={0.01}
           onChange={onSquishExponentChange}
         />
         
@@ -352,9 +343,9 @@ function TransformOriginContent({
           label="Origin Strength"
           value={originStrength}
           displayValue={originStrength.toFixed(2)}
-          min={0}
-          max={10}
-          step={0.1}
+          min={0.5}
+          max={3.0}
+          step={0.01}
           onChange={onOriginStrengthChange}
         />
 
@@ -425,6 +416,58 @@ function ValueCard({ label, value }: { label: string; value?: number }) {
         {value?.toFixed(2) || 'N/A'}
       </div>
     </div>
+  );
+}
+
+function MiniCurveGraph({ exponent }: { exponent: number }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const width = 40;
+  const height = 20;
+  const padding = 3;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw curve: y = x^exponent
+    ctx.strokeStyle = '#6b7280'; // gray-500
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    const graphWidth = width - 2 * padding;
+    const graphHeight = height - 2 * padding;
+
+    for (let i = 0; i <= graphWidth; i++) {
+      const x = i / graphWidth; // 0 to 1
+      const y = Math.pow(x, exponent); // 0 to 1
+      const px = padding + i;
+      const py = height - padding - y * graphHeight;
+
+      if (i === 0) {
+        ctx.moveTo(px, py);
+      } else {
+        ctx.lineTo(px, py);
+      }
+    }
+    ctx.stroke();
+  }, [exponent]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={width}
+      height={height}
+      className="border border-gray-200 rounded bg-white"
+    />
   );
 }
 

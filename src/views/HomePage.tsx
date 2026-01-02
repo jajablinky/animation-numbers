@@ -6,12 +6,12 @@ import { useProximityAnimation } from '../hooks/useProximityAnimation';
 
 function HomePage() {
   const [showDebug, setShowDebug] = useState(false);
-  const [minScale, setMinScale] = useState(0.2);
-  const [maxScale, setMaxScale] = useState(2.0);
-  const [curveExponent, setCurveExponent] = useState(1.0);
-  const [displayCurveExponent, setDisplayCurveExponent] = useState(0.1);
-  const [squishExponent, setSquishExponent] = useState(0.6);
-  const [originStrength, setOriginStrength] = useState(1.0);
+  const [minScale, setMinScale] = useState(0.02);
+  const [maxScale, setMaxScale] = useState(1.5);
+  const [curveExponent, setCurveExponent] = useState(3.0);
+  const [displayCurveExponent, setDisplayCurveExponent] = useState(2.0);
+  const [squishExponent, setSquishExponent] = useState(0.98);
+  const [originStrength, setOriginStrength] = useState(1.01);
   const [showDots, setShowDots] = useState(true);
   const [showBorder, setShowBorder] = useState(true);
 
@@ -54,6 +54,10 @@ function HomePage() {
             <button
               onClick={() => setShowDebug(s => !s)}
               className="px-3 py-2 bg-white/90 text-gray-900 text-sm font-medium rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-white transition-all duration-150 active:scale-[0.99] backdrop-blur"
+              style={{
+                fontFamily:
+                  '"SF Pro", -apple-system, BlinkMacSystemFont, sans-serif',
+              }}
             >
               {showDebug ? 'Hide Controls' : 'Show Controls'}
             </button>
@@ -84,7 +88,7 @@ function HomePage() {
               animate={{ width: 360, opacity: 1, x: 0 }}
               exit={{ width: 0, opacity: 0, x: 24 }}
               transition={{ type: 'spring', stiffness: 420, damping: 40 }}
-              className="h-screen border-l border-gray-200 bg-white/85 backdrop-blur-md shadow-xl overflow-hidden"
+              className="h-screen border-l border-gray-200 bg-white/85 backdrop-blur-md shadow-xl overflow-hidden z-50"
             >
               <div className="h-full p-4 overflow-y-auto custom-scrollbar-light">
                 <DebugPanel
